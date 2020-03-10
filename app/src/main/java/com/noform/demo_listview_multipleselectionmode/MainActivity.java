@@ -1,10 +1,10 @@
 package com.noform.demo_listview_multipleselectionmode;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -15,10 +15,15 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ViewPager mViewPager;
+    private View page0, page1;
+    private List<View> viewList;//view数组
     static ListView list;
+    private MyPagerAdapter pagerAdapter;
     static MyAdapter listItemAdapter;//适配器
     static boolean isMultipleSelectionMode;//判断进入多选模式
     public static ArrayList<HashMap<String, Object>> AdapterList = new ArrayList<>();  //数据
@@ -32,6 +37,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         CONTEXT = this.getApplicationContext();
+
+        mViewPager=findViewById(R.id.activityViewPager);
+
+        LayoutInflater inflater = getLayoutInflater();
+        page0 =inflater.inflate(R.layout.list_view, null);
+        page1 = inflater.inflate(R.layout.null_layout, null);
+        list = page0.findViewById(R.id.mylistview);
+
+        viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
+        viewList.add(page0);
+        viewList.add(page1);
+        pagerAdapter = new MyPagerAdapter(viewList);
+        mViewPager.setAdapter(pagerAdapter);
+
+
+
+
+
         //初始化数据
         initData();
 
@@ -95,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initData(){
-        list = this.findViewById(R.id.mylistview);
 
         for(int i = 0;i< 50;i++){
             HashMap<String,Object> map = new HashMap<>();
